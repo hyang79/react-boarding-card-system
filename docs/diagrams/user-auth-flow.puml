@@ -1,0 +1,77 @@
+@startuml 사용자 인증 플로우
+
+title 사용자 인증 플로우 시퀀스 다이어그램
+
+actor 사용자 as User
+participant "클라이언트\n(React)" as Client
+participant "인증 서비스" as AuthService
+participant "백엔드 API" as API
+database "데이터베이스" as DB
+
+== 로그인 플로우 ==
+User -> Client: 로그인 페이지 접근
+Client -> User: 로그인 폼 표시
+
+User -> Client: 이메일/비밀번호 입력
+Client -> AuthService: 로그인 요청\n(email, password)
+
+AuthService -> API: POST /api/auth/login
+API -> DB: 사용자 정보 조회
+DB -> API: 사용자 데이터 반환
+
+alt 인증 성공
+    API -> API: 비밀번호 검증
+    API -> API: JWT 토큰 생성
+    API -> AuthService: 토큰 반환\n(accessToken, refreshToken)
+    AuthService -> Client: 인증 성공 응답
+    Client -> Client: 토큰 저장\n(localStorage)
+    Client -> User: 메인 페이지로 리다이렉트
+else 인증 실패
+    API -> AuthService: 에러 응답\n(401 Unauthorized)
+    AuthService -> Client: 인증 실패 응답
+    Client -> User: 에러 메시지 표시
+end
+
+== 인증된 요청 플로우 ==
+User -> Client: 보호된 리소스 요청
+Client -> Client: 토큰 확인
+Client -> API: API 요청\n(Authorization: Bearer token)
+
+alt 토큰 유효
+    API -> API: 토큰 검증
+    API -> DB: 데이터 조회
+    DB -> API: 데이터 반환
+    API -> Client: 성공 응답
+    Client -> User: 데이터 표시
+else 토큰 만료
+    API -> Client: 401 Unauthorized
+    Client -> AuthService: 토큰 갱신 요청\n(refreshToken)
+    
+    alt 리프레시 토큰 유효
+        AuthService -> API: POST /api/auth/refresh
+        API -> API: 리프레시 토큰 검증
+        API -> API: 새 액세스 토큰 생성
+        API -> AuthService: 새 토큰 반환
+        AuthService -> Client: 새 토큰 저장
+        Client -> API: 원래 요청 재시도
+        API -> Client: 성공 응답
+        Client -> User: 데이터 표시
+    else 리프레시 토큰 만료
+        AuthService -> Client: 인증 만료
+        Client -> Client: 토큰 삭제
+        Client -> User: 로그인 페이지로 리다이렉트
+    end
+end
+
+== 로그아웃 플로우 ==
+User -> Client: 로그아웃 버튼 클릭
+Client -> AuthService: 로그아웃 요청
+AuthService -> API: POST /api/auth/logout\n(refreshToken)
+API -> DB: 리프레시 토큰 무효화
+DB -> API: 완료 응답
+API -> AuthService: 로그아웃 성공
+AuthService -> Client: 로그아웃 완료
+Client -> Client: 토큰 삭제
+Client -> User: 로그인 페이지로 리다이렉트
+
+@enduml

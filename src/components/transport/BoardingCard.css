@@ -1,0 +1,466 @@
+/* 탑승카드 컴포넌트 스타일 */
+.boarding-card-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+/* 탑승카드 디자인 */
+.boarding-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  color: white;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 500px;
+  margin: var(--spacing-lg) 0;
+}
+
+.card-info h3 {
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  min-width: 250px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.info-item .label {
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.info-item .value {
+  font-weight: 600;
+}
+
+/* QR 코드 컨테이너 */
+.qr-container {
+  background: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 액션 버튼들 */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .boarding-card-container {
+    padding: var(--spacing-md);
+  }
+  
+  .boarding-card {
+    flex-direction: column;
+    min-width: auto;
+    width: 100%;
+    text-align: center;
+    gap: var(--spacing-lg);
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .action-buttons .btn {
+    width: 100%;
+  }
+}
+
+/* 프린트 스타일 */
+@media print {
+  .boarding-card-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .form-section,
+  .action-buttons {
+    display: none;
+  }
+  
+  .boarding-card {
+    background: white !important;
+    color: black !important;
+    border: 2px solid #333;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+  
+  .info-item .label,
+  .info-item .value {
+    color: black !important;
+  }
+  
+  .info-item {
+    border-bottom: 1px solid #ccc;
+  }
+}
+/* 
+유효시간 표시 */
+.validity-info {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.time-remaining {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--success-color);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.time-label {
+  font-size: 0.875rem;
+}
+
+.time-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.expired-notice {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background-color: var(--error-color);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-align: center;
+}
+
+.expired-text {
+  font-size: 0.875rem;
+}
+
+/* 만료된 카드 스타일 */
+.boarding-card.expired {
+  opacity: 0.6;
+  position: relative;
+}
+
+.boarding-card.expired::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-lg);
+  z-index: 1;
+}
+
+/* 만료된 QR 컨테이너 */
+.qr-container.expired {
+  position: relative;
+}
+
+.expired-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.expired-message {
+  text-align: center;
+  color: white;
+}
+
+.expired-message span {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.refresh-btn {
+  background: none;
+  border: 2px solid white;
+  color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-btn:hover {
+  background-color: white;
+  color: var(--text-primary);
+  transform: rotate(180deg);
+}
+
+.refresh-btn:active {
+  transform: rotate(360deg) scale(0.9);
+}
+
+/* 버튼 비활성화 스타일 */
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--bg-gray-100) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-gray-200) !important;
+}
+
+/* 시간 경고 스타일 (1분 미만일 때) */
+.time-remaining.warning {
+  background-color: var(--warning-color);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* 반응형 - 만료 상태 */
+@media (max-width: 768px) {
+  .expired-overlay {
+    border-radius: var(--radius-sm);
+  }
+  
+  .refresh-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  .time-remaining,
+  .expired-notice {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.8125rem;
+  }
+  
+  .time-value {
+    font-size: 1rem;
+  }
+}/*
+ 새로고침 애니메이션 */
+.refresh-btn.refreshing {
+  animation: refreshSpin 0.5s ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes refreshSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 새로고침 중 버튼 스타일 */
+.btn:disabled.btn-primary {
+  background-color: var(--primary-color) !important;
+  opacity: 0.7 !important;
+  cursor: wait !important;
+}/* QR 코드 보
+안 스타일 */
+.qr-container {
+  /* 선택 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* 드래그 방지 */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  
+  /* 우클릭 방지 시각적 표시 */
+  position: relative;
+}
+
+.qr-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* QR 코드 SVG 보안 */
+.qr-container svg {
+  /* 선택 방지 */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* 드래그 방지 */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  
+  /* 우클릭 방지 */
+  pointer-events: none;
+}
+
+/* 보안 경고 메시지 */
+.security-warning {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(239, 68, 68, 0.95);
+  color: white;
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-md);
+  z-index: 9999;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: none;
+}
+
+.security-warning.show {
+  display: block;
+  animation: securityAlert 0.3s ease-out;
+}
+
+@keyframes securityAlert {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 개발자 도구 감지 시 블러 효과 */
+.qr-container.dev-tools-detected {
+  filter: blur(10px) !important;
+  pointer-events: none !important;
+}
+
+.qr-container.dev-tools-detected::after {
+  content: '⚠️ 보안상 QR 코드가 숨겨졌습니다';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 10;
+  white-space: nowrap;
+}
+
+/* 복사 방지 추가 스타일 */
+.boarding-card {
+  /* 인쇄 방지 */
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* 스크린샷 방지 (일부 브라우저에서 지원) */
+.qr-container {
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 모바일에서 길게 누르기 방지 */
+@media (max-width: 768px) {
+  .qr-container {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* QR 코드 워터마크 */
+.qr-watermark {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.625rem;
+  color: rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+.qr-watermark span {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1px 3px;
+  border-radius: 2px;
+  margin-bottom: 1px;
+}

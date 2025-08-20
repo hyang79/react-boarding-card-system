@@ -1,0 +1,47 @@
+@startuml admin-system-structure
+title 관리자 시스템 기능 구조
+
+package "관리자 시스템" {
+
+    package "운영관리" {
+
+        [운영현황] as OperationStatus
+        note right of OperationStatus
+            R: 목록, 상세 조회
+            U: 도착상태 사유 수정
+        end note
+
+        [운영일지] as OperationLog
+        note right of OperationLog
+            C: 생성
+            R: 목록, 상세 조회
+        end note
+
+        package "사고보고" {
+
+            [사고보고관리] as AccidentMgmt
+            note right of AccidentMgmt
+                C: 생성
+                R: 조회
+            end note
+
+            [발송그룹관리] as SendGroupMgmt
+            note right of SendGroupMgmt
+                C: 생성
+                R: 조회
+                U: 수정
+                D: 삭제
+            end note
+
+            [발송내역] as SendHistory
+            note right of SendHistory
+                발송 이력 관리
+            end note
+
+            AccidentMgmt --> SendGroupMgmt : 관리
+            AccidentMgmt --> SendHistory : 발송
+        }
+    }
+}
+
+@enduml

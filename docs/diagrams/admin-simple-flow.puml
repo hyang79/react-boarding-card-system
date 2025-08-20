@@ -1,0 +1,31 @@
+@startuml admin-simple-flow
+title 관리자 시스템 간단 순서도
+
+start
+
+:관리자 접속;
+
+partition "운영관리" {
+    :운영현황 관리;
+    note right: R(조회), U(수정)
+    
+    :운영일지 관리;
+    note right: C(작성), R(조회)
+    
+    partition "사고보고" {
+        :사고보고 작성/조회;
+        note right: C(작성), R(조회)
+        
+        :발송그룹 관리;
+        note right: CRUD 전체
+        
+        :발송내역 확인;
+        note right: 발송 이력 관리
+    }
+}
+
+:업무 완료;
+
+stop
+
+@enduml
